@@ -16,4 +16,11 @@ Rectangle {
     // Layout.fillWidth: true
     anchors.fill: parent
     height: 50
+
+    MouseArea {
+            anchors.fill: parent
+            onClicked: { 
+                parent.color = "#FD7503" 
+            }
+    }
 }

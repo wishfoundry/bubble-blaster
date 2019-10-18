@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # QT_LOGGING_RULES="qt.qpa.eglfs.kms=true"
     app = QApplication(sys.argv)
     view = QQuickView()
-    qml_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "run_n_done.qml"))
+    qml_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "rnd.qml"))
     view.setSource(QUrl.fromLocalFile(qml_file))
 
     if view.status() == QQuickView.Error:

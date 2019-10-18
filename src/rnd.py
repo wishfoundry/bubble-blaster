@@ -12,9 +12,12 @@ if __name__ == '__main__':
     # os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=true'
     # QT_LOGGING_RULES="qt.qpa.eglfs.kms=true"
     app = QApplication(sys.argv)
+    qml_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "mikki.qml"))
     view = QQuickView()
-    qml_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "rnd.qml"))
+    view.setMinimumHeight(400)
+    view.setMinimumWidth(600)
     view.setSource(QUrl.fromLocalFile(qml_file))
+    view.setResizeMode(QQuickView.SizeRootObjectToView)
 
     if view.status() == QQuickView.Error:
         sys.exit(-1)

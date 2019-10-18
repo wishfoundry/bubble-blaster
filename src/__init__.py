@@ -17,8 +17,8 @@ if __name__ == "__main__":
     # button.clicked.connect(say_hello)
     # button.show()
     view = QQuickView()
-    
-    view.setSource(QUrl.fromLocalFile("./src/mikki.qml"))
+    qml_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "mikki.qml"))
+    view.setSource(QUrl.fromLocalFile(qml_file))
     view.setMinimumHeight(400)
     view.setMinimumWidth(600)
     view.setResizeMode(QQuickView.SizeRootObjectToView)

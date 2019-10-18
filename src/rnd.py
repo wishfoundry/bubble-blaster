@@ -11,11 +11,12 @@ if __name__ == '__main__':
     # os.environ['QT_QPA_EGLFS_ALWAYS_SET_MODE'] = '1'
     # os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=true'
     # QT_LOGGING_RULES="qt.qpa.eglfs.kms=true"
+    os.environ["QT_QUICK_CONTROLS_STYLE"] = "Material"
     app = QApplication(sys.argv)
     qml_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "mikki.qml"))
     view = QQuickView()
-    view.setMinimumHeight(400)
-    view.setMinimumWidth(600)
+    view.setMinimumHeight(480)
+    view.setMinimumWidth(800)
     view.setSource(QUrl.fromLocalFile(qml_file))
     view.setResizeMode(QQuickView.SizeRootObjectToView)
 

@@ -35,6 +35,10 @@ if __name__ == '__main__':
     # enable Ctrl-C to quit from cli
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+    # timer = QTimer()
+    # timer.start(500)  # You may change this if you wish.
+    # timer.timeout.connect(lambda: None)  # Let the interpreter run each 500 ms.
+
+    app.aboutToQuit.connect(lambda : cleanup())
 
     sys.exit(app.exec_())
-    cleanup()

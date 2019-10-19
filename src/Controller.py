@@ -134,4 +134,4 @@ class Controller(QObject):
     # int between 0 and 100
     @Slot(int)
     def brightness(self, value):
-        Screen.brightness(int)
+        Screen.brightness(value)

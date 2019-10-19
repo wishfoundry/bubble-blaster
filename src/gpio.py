@@ -13,22 +13,22 @@ except ImportError:
     import FakeRPi.GPIO as GPIO
     isFake = True
 
-A = 6
-B = 3
-C = 22
-D = 25
+A = 4
+B = 22
+C = 6
+D = 26
 
 def setupPins():
     print('using fake mode on pins: ' + str(isFake))
     GPIO.setmode(GPIO.BCM)
     # GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(A, GPIO.OUT)
+    GPIO.setup(A, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.setup(B, GPIO.OUT)
     GPIO.setup(C, GPIO.OUT)
     GPIO.setup(D, GPIO.OUT)
 
-def turnOn(pin): GPIO.output(4, GPIO.HIGH)
-def turnOff(pin): GPIO.output(4, GPIO.LOW)
+def turnOn(pin): GPIO.output(4, GPIO.LOW)
+def turnOff(pin): GPIO.output(4, GPIO.HIGH)
 
 def cleanup():
     GPIO.cleanup()

@@ -3,7 +3,7 @@ import datetime
 from PySide2.QtGui import *
 from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
 from PySide2.QtGui import QGuiApplication, QKeySequence
-from gpio import setupPins, turnOn, turnOff, A, B
+from gpio import setupPins, turnOn, turnOff, cleanup, A, B
 
 
 def minutesOf(ms):
@@ -31,6 +31,7 @@ class Controller(QObject):
         self._timer = QTimer(self)
         self._tickTimer.timeout.connect(self.onTick)
         self._timer.timeout.connect(self.onTimeout)
+        self.destroyed.connect(lambda : cleanup())
 
     def runCycle(self):
         turnOn(A)

@@ -15,6 +15,7 @@ def filePath(fileName):
 
 APPLAUSE = filePath('./resources/applause-1.wav')
 TICK = filePath('./resources/tape-measure-1.wav')
+isSoundEnabled = True
 
 def minutesOf(ms):
     return math.floor(ms / 60000)
@@ -43,8 +44,9 @@ class Controller(QObject):
         self._tickTimer.timeout.connect(self.onTick)
         self._timer.timeout.connect(self.onTimeout)
         self.destroyed.connect(lambda : Gpio.cleanup())
-        # self.sound = QSoundEffect(self)
-        # self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
+        if isSoundEnabled:
+            self.sound = QSoundEffect(self)
+            self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
 
     @Signal
     def notifyIsRunning(self): pass
@@ -80,9 +82,10 @@ class Controller(QObject):
         self._isRunning = True
         self.notifyIsRunning.emit()
         Gpio.runCycle(self._ms)
-        # self.sound.stop()
-        # self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
-        # self.sound.play()
+        if isSoundEnabled:
+            self.sound.stop()
+            self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
+            self.sound.play()
     
     def onTimeout(self):
         self.stop()
@@ -99,6 +102,8 @@ class Controller(QObject):
         self.displayTimeChanged.emit()
         self.notifyIsRunning.emit()
         Gpio.stopCycle()
+        if isSoundEnabled:
+            self.sound.stop()
 
 
     @Signal
@@ -124,9 +129,10 @@ class Controller(QObject):
         self._ms = ms
         self.minuteChanged.emit()
         self.displayTimeChanged.emit()
-        # self.sound.stop()
-        # self.sound.setSource(QUrl.fromLocalFile(TICK))
-        # self.sound.play()
+        if isSoundEnabled:
+            self.sound.stop()
+            self.sound.setSource(QUrl.fromLocalFile(TICK))
+            self.sound.play()
 
     # int between 0 and 100
     @Slot(int)
@@ -138,10 +144,11 @@ class Controller(QObject):
     def volume(self, value):
         # real between 0.0 and 1.0
         print ('audio: ', str(value / 100))
-        # self.sound.setVolume(value / 100)
-        # self.sound.stop()
-        # self.sound.setSource(QUrl.fromLocalFile(TICK))
-        # self.sound.play()
+        if isSoundEnabled:
+            self.sound.setVolume(value / 100)
+            self.sound.stop()
+            self.sound.setSource(QUrl.fromLocalFile(TICK))
+            self.sound.play()
 
     @Property(int, constant=True)
     def MIN_TIME(self):

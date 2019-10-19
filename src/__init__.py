@@ -25,8 +25,8 @@ if __name__ == '__main__':
 
     ctrl = Controller()
     engine = QQmlApplicationEngine()
-    engine.load(QUrl.fromLocalFile(filePath("app.qml")))
     engine.rootContext().setContextProperty('app', ctrl)
+    engine.load(QUrl.fromLocalFile(filePath("app.qml")))
 
     # safety timeout, must go away!
     # QTimer.singleShot(minutes(10), lambda : app.quit())

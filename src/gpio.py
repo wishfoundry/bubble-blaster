@@ -20,7 +20,8 @@ D = 25
 
 def setupPins():
     print('using fake mode on pins: ' + str(isFake))
-    GPIO.setmode(GPIO.BCM)
+    # GPIO.setmode(GPIO.BCM)
+    GPIO.setmode(GPIO.BOARD)
     GPIO.setup(A, GPIO.OUT)
     GPIO.setup(B, GPIO.OUT)
     GPIO.setup(C, GPIO.OUT)

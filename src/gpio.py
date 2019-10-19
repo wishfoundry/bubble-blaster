@@ -17,18 +17,23 @@ A = 4
 B = 22
 C = 6
 D = 26
+PINS = [A,B,C,D]
+
+def setupPin(pin):
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.LOW)
 
 def setupPins():
     print('using fake mode on pins: ' + str(isFake))
     GPIO.setmode(GPIO.BCM)
-    # GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(A, GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.setup(B, GPIO.OUT)
-    GPIO.setup(C, GPIO.OUT)
-    GPIO.setup(D, GPIO.OUT)
+    setupPin(A)
+    setupPin(D)
+    setupPin(C)
+    setupPin(D)
 
-def turnOn(pin): GPIO.output(4, GPIO.LOW)
-def turnOff(pin): GPIO.output(4, GPIO.HIGH)
+def turnOn(pin): GPIO.output(A, GPIO.HIGH)
+def turnOff(pin): GPIO.output(A, GPIO.LOW)
 
 def cleanup():
+    print('cleaning up pins')
     GPIO.cleanup()

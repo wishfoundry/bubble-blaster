@@ -35,5 +35,6 @@ if __name__ == '__main__':
     # enable Ctrl-C to quit from cli
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+
     sys.exit(app.exec_())
     cleanup()

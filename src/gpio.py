@@ -31,8 +31,8 @@ def setupPins():
     setupPin(C)
     setupPin(D)
 
-def turnOn(pin): GPIO.output(A, GPIO.HIGH)
-def turnOff(pin): GPIO.output(A, GPIO.LOW)
+def turnOn(pin): GPIO.output(pin, GPIO.HIGH)
+def turnOff(pin): GPIO.output(pin, GPIO.LOW)
 
 def cleanup():
     print('cleaning up pins')

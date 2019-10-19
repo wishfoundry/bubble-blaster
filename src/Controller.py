@@ -43,8 +43,8 @@ class Controller(QObject):
         self._tickTimer.timeout.connect(self.onTick)
         self._timer.timeout.connect(self.onTimeout)
         self.destroyed.connect(lambda : Gpio.cleanup())
-        self.sound = QSoundEffect(self)
-        self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
+        # self.sound = QSoundEffect(self)
+        # self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
 
     @Signal
     def notifyIsRunning(self): pass
@@ -80,9 +80,9 @@ class Controller(QObject):
         self._isRunning = True
         self.notifyIsRunning.emit()
         Gpio.runCycle(self._ms)
-        self.sound.stop()
-        self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
-        self.sound.play()
+        # self.sound.stop()
+        # self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
+        # self.sound.play()
     
     def onTimeout(self):
         self.stop()
@@ -124,9 +124,9 @@ class Controller(QObject):
         self._ms = ms
         self.minuteChanged.emit()
         self.displayTimeChanged.emit()
-        self.sound.stop()
-        self.sound.setSource(QUrl.fromLocalFile(TICK))
-        self.sound.play()
+        # self.sound.stop()
+        # self.sound.setSource(QUrl.fromLocalFile(TICK))
+        # self.sound.play()
 
     # int between 0 and 100
     @Slot(int)
@@ -137,11 +137,11 @@ class Controller(QObject):
     @Slot(int)
     def volume(self, value):
         # real between 0.0 and 1.0
-        # print ('audio: ', str(value / 100))
-        self.sound.setVolume(value / 100)
-        self.sound.stop()
-        self.sound.setSource(QUrl.fromLocalFile(TICK))
-        self.sound.play()
+        print ('audio: ', str(value / 100))
+        # self.sound.setVolume(value / 100)
+        # self.sound.stop()
+        # self.sound.setSource(QUrl.fromLocalFile(TICK))
+        # self.sound.play()
 
     @Property(int, constant=True)
     def MIN_TIME(self):

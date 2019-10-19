@@ -3,7 +3,7 @@ from os import path
 import datetime
 from PySide2.QtGui import *
 from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer, QUrl
-from PySide2.QtMultimedia import QSoundEffect
+from PySide2.QtMultimedia import QSoundEffect, QAudioDeviceInfo, QAudio
 from PySide2.QtGui import QGuiApplication, QKeySequence
 import gpio as Gpio
 import screen as Screen
@@ -45,6 +45,8 @@ class Controller(QObject):
         self._timer.timeout.connect(self.onTimeout)
         self.destroyed.connect(lambda : Gpio.cleanup())
         if isSoundEnabled:
+            for device in QAudioDeviceInfo.availableDevices(QAudio.AudioOutput):
+                print(device.deviceName())
             self.sound = QSoundEffect(self)
             self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
 

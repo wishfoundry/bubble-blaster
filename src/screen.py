@@ -5,5 +5,5 @@ from rpi_backlight import Backlight
 
 bl = Backlight()
 
-def brightness(int):
-    bl.brightness = int
+def brightness(value):
+    bl.brightness = value

@@ -23,7 +23,7 @@ ApplicationWindow {
         height: window.height
     }
 
-    // provide a backdoor to close the app
+    // provide a backdoor to close the app via keyboard
     Shortcut {
         sequences: [StandardKey.Cancel, "Ctrl+C", StandardKey.Backspace, StandardKey.Close]
         context: Qt.ApplicationShortcut

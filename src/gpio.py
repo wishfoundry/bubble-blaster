@@ -2,7 +2,7 @@ import importlib.util
 try:
     importlib.util.find_spec('RPi.GPIO')
     import RPi.GPIO as GPIO
-    isFake = false
+    isFake = False
 except ImportError:
     """
     import FakeRPi.GPIO as GPIO

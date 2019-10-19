@@ -36,13 +36,15 @@ class Controller(QObject):
     def runCycle(self):
         print("running cycle")
         turnOn(A)
-        QTimer.singleShot(1000, lambda : turnOff(A))
+        
+
         QTimer.singleShot(1000, lambda : turnOn(B))
-        QTimer.singleShot(2000, lambda : turnOff(B))
         QTimer.singleShot(2000, lambda : turnOn(C))
-        QTimer.singleShot(3000, lambda : turnOff(C))
         QTimer.singleShot(3000, lambda : turnOn(D))
-        QTimer.singleShot(4000, lambda : turnOff(D))
+        QTimer.singleShot(4000, lambda : turnOff(A))
+        QTimer.singleShot(5000, lambda : turnOff(B))
+        QTimer.singleShot(6000, lambda : turnOff(C))
+        QTimer.singleShot(7000, lambda : turnOff(D))
 
     @Signal
     def notifyIsRunning(self): pass

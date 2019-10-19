@@ -49,9 +49,9 @@ Rectangle {
             id: brightnessSlider
             anchors.left: parent.left
             anchors.leftMargin: 50
-            width: 100
+            width: 150
             y: -2
-            from: 1
+            from: 10
             to: 100
             value: 100
 
@@ -73,7 +73,7 @@ Rectangle {
             id: audioSlider
             anchors.right: parent.right
             anchors.rightMargin: 50
-            width: 100
+            width: 150
             y: -2
             from: 1
             to: 100

@@ -3,7 +3,7 @@ import datetime
 from PySide2.QtGui import *
 from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
 from PySide2.QtGui import QGuiApplication, QKeySequence
-from gpio import setupPins, turnOn, turnOff, cleanup, A, B, C, D
+import gpio as Gpio
 import screen as Screen
 from config import PRIME_DURATION
 
@@ -21,11 +21,12 @@ def toDisplayTime(min, sec):
 def msToDisplayTime(ms):
     return toDisplayTime(minutesOf(ms), secondsOf(ms))
 
+
 class Controller(QObject):
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        setupPins()
+        Gpio.setupPins()
         # 10 minutes default
         self._ms = 10 * 60 * 1000
         self._isRunning = False
@@ -33,28 +34,7 @@ class Controller(QObject):
         self._timer = QTimer(self)
         self._tickTimer.timeout.connect(self.onTick)
         self._timer.timeout.connect(self.onTimeout)
-        self.destroyed.connect(lambda : cleanup())
-
-    def runCycle(self):
-        print("running cycle")
-        turnOn(A)
-        turnOn(B)
-        turnOn(C)
-        turnOn(D)
-        QTimer.singleShot(PRIME_DURATION, lambda : turnOff(B))
-        QTimer.singleShot(self._ms, lambda : turnOff(A))
-        QTimer.singleShot(self._ms, lambda : turnOff(C))
-        QTimer.singleShot(self._ms, lambda : turnOff(D))
-
-        
-        # interval = 400
-        # QTimer.singleShot(1 * interval, lambda : turnOn(B))
-        # QTimer.singleShot(2 * interval, lambda : turnOn(C))
-        # QTimer.singleShot(3 * interval, lambda : turnOn(D))
-        # QTimer.singleShot(4 * interval, lambda : turnOff(A))
-        # QTimer.singleShot(5 * interval, lambda : turnOff(B))
-        # QTimer.singleShot(6 * interval, lambda : turnOff(C))
-        # QTimer.singleShot(7 * interval, lambda : turnOff(D))
+        self.destroyed.connect(lambda : Gpio.cleanup())
 
     @Signal
     def notifyIsRunning(self): pass
@@ -89,7 +69,7 @@ class Controller(QObject):
         self._tickTimer.start(1000)
         self._isRunning = True
         self.notifyIsRunning.emit()
-        self.runCycle()
+        Gpio.runCycle(self._ms)
     
     def onTimeout(self):
         self.stop()
@@ -105,6 +85,7 @@ class Controller(QObject):
         self._isRunning = False
         self.displayTimeChanged.emit()
         self.notifyIsRunning.emit()
+        Gpio.stopCycle()
 
 
     @Signal

@@ -6,5 +6,5 @@ from rpi_backlight import Backlight
 bl = Backlight()
 
 def brightness(value):
-    print("brightness: " + value)
+    print("brightness: " + str(value))
     bl.brightness = int(value)

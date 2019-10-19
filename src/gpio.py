@@ -1,6 +1,6 @@
 import importlib.util
 from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
-from config import POST_PRIME_DELAY, PRIME_DURATION
+from config import POST_PRIME_DELAY, PRIME_DURATION, CLEAN_CYCLE_TIME, RINSE_CYCLE_TIME
 try:
     importlib.util.find_spec('RPi.GPIO')
     import RPi.GPIO as GPIO
@@ -58,12 +58,33 @@ def testRelays():
     # QTimer.singleShot(7 * interval, lambda : turnOff(D))
 
 
-def runCycle(duration):
-    print("running cycle")
+def mainCycle(duration):
+    print("running main cycle")
     turnOn(PRIME)
     QTimer.singleShot(PRIME_DURATION, lambda : turnOff(PRIME))
     QTimer.singleShot(POST_PRIME_DELAY, lambda : turnOnAll([MAIN, OXY, ELECTRO]))
     QTimer.singleShot(duration, lambda : turnOffAll([MAIN, OXY, ELECTRO]))
+
+def rinseCycle():
+    #  drop
+    print("running rinse cycle")
+    turnOnAll([PRIME, MAIN])
+    QTimer.singleShot(45 * 1000, lambda : turnOn(OXY))
+    QTimer.singleShot(RINSE_CYCLE_TIME * 60 * 1000, lambda : turnOffAll(PINS))
+
+def cleanCycle():
+    # broom/car-turbo-charger
+    print("running clean cycle")
+    turnOnAll([MAIN, PRIME, OXY])
+    QTimer.singleShot(CLEAN_CYCLE_TIME * 60 * 1000, lambda : turnOffAll(PINS))
+
+def runCycle(duration):
+    if duration == (CLEAN_CYCLE_TIME * 60 * 1000):
+        cleanCycle()
+    elif duration == (RINSE_CYCLE_TIME * 60 * 1000):
+        rinseCycle()
+    else:
+        mainCycle(duration)
 
 def stopCycle():
     print('stopping cycle')

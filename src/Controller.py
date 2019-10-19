@@ -1,12 +1,20 @@
 import math
+from os import path
 import datetime
 from PySide2.QtGui import *
-from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
+from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer, QUrl
+from PySide2.QtMultimedia import QSoundEffect
 from PySide2.QtGui import QGuiApplication, QKeySequence
 import gpio as Gpio
 import screen as Screen
 import config
 
+
+def filePath(fileName):
+    return path.abspath(path.join(path.dirname(__file__), fileName))
+
+APPLAUSE = filePath('./resources/applause-1.wav')
+TICK = filePath('./resources/tape-measure-1.wav')
 
 def minutesOf(ms):
     return math.floor(ms / 60000)
@@ -35,6 +43,8 @@ class Controller(QObject):
         self._tickTimer.timeout.connect(self.onTick)
         self._timer.timeout.connect(self.onTimeout)
         self.destroyed.connect(lambda : Gpio.cleanup())
+        self.sound = QSoundEffect(self)
+        self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
 
     @Signal
     def notifyIsRunning(self): pass
@@ -70,6 +80,9 @@ class Controller(QObject):
         self._isRunning = True
         self.notifyIsRunning.emit()
         Gpio.runCycle(self._ms)
+        self.sound.stop()
+        self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
+        self.sound.play()
     
     def onTimeout(self):
         self.stop()
@@ -111,16 +124,37 @@ class Controller(QObject):
         self._ms = ms
         self.minuteChanged.emit()
         self.displayTimeChanged.emit()
+        self.sound.stop()
+        self.sound.setSource(QUrl.fromLocalFile(TICK))
+        self.sound.play()
 
     # int between 0 and 100
     @Slot(int)
     def brightness(self, value):
         Screen.brightness(value)
 
-    @Property(int)
-    def MIN_TIME():
+    # int between 0 and 100
+    @Slot(int)
+    def volume(self, value):
+        # real between 0.0 and 1.0
+        # print ('audio: ', str(value / 100))
+        self.sound.setVolume(value / 100)
+        self.sound.stop()
+        self.sound.setSource(QUrl.fromLocalFile(TICK))
+        self.sound.play()
+
+    @Property(int, constant=True)
+    def MIN_TIME(self):
         return config.MIN_TIME
     
-    @Property(int)
-    def MAX_TIME():
+    @Property(int, constant=True)
+    def MAX_TIME(self):
         return config.MAX_TIME
+
+    @Property(int, constant=True)
+    def CLEAN_TIME(self):
+        return config.CLEAN_CYCLE_TIME
+
+    @Property(int, constant=True)
+    def RINSE_TIME(self):
+        return config.RINSE_CYCLE_TIME

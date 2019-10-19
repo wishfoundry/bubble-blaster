@@ -1,7 +1,17 @@
 // Material Design Icons 2.5.94
 var glyphs = {
     "mdi-play": "\uf40a",
-
+    "circle-slice-1": "\uFA9D",
+    "circle-slice-2": "\uFA9E",
+    "circle-slice-3": "\uFA9F",
+    "circle-slice-4": "\uFAA0",
+    "circle-slice-5": "\uFAA1",
+    "circle-slice-6": "\uFAA2",
+    "circle-slice-7": "\uFAA3",
+    "circle-slice-8": "\uFAA4",
+    "car-turbocharger": "\uF003C",
+    "approximately-equal": "\uFFBE",
+    "shaker": "\uF0139",
 
 	"access-point": "\uf002",
 	"access-point-network": "\uf003",

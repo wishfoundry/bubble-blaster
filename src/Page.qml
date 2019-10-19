@@ -2,6 +2,8 @@ import QtQuick 2.11
 import QtQuick.Window 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
+import QtQuick.Shapes 1.13
+import QtQuick.Controls.Material 2.4
 import "./" as App
 
 Rectangle {
@@ -78,10 +80,11 @@ Rectangle {
             from: 1
             to: 100
             value: 100
+            stepSize: 1
 
-            // onValueChanged: {
-            //     app.brightness(value)
-            // }
+            onValueChanged: {
+                app.volume(value)
+            }
 
             App.MaterialIcon {
                 id: volumeIcon
@@ -102,11 +105,12 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    
 
     Slider {
         id: timeSlider
-        from: 1
-        to: 30
+        from: app.MIN_TIME
+        to: app.MAX_TIME
         stepSize: 1
         snapMode: Slider.SnapAlways
         value: app.minute
@@ -121,6 +125,94 @@ Rectangle {
 
         onValueChanged: {
             app.minute = value
+        }
+        Shape {
+            id: tripath
+            height: 12
+            width: timeSlider.width 
+            anchors.right: timeSlider.right
+            anchors.rightMargin: 6
+            anchors.verticalCenter: timeSlider.verticalCenter
+            smooth: true
+            antialiasing: true
+            layer.enabled: true
+            layer.samples: 4
+            ShapePath {
+                fillColor: '#80CBC4'
+                // fillRule: ShapePath.WindingFill
+                strokeWidth: 0
+                strokeColor: 'transparent'
+                startX: 0
+                startY: tripath.height / 2
+                PathLine { x: tripath.width; y: 0 }
+                PathLine { x: tripath.width; y: tripath.height }
+            }
+        }
+
+        App.MaterialIcon {
+            id: rinseIcon
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: -6
+            name: "water"
+            color: "#257E88"
+            size: 20
+        }
+
+        
+        App.MaterialIcon {
+            id: cleanIcon
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: 19
+            name: "account-star"
+            color: "#257E88"
+            size: 20
+        }
+
+        App.MaterialIcon {
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: 49
+            name: "circle-outline"
+            color: "#257E88"
+            size: 20
+        }
+
+        App.MaterialIcon {
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: 177
+            name: "circle-slice-2"
+            color: "#257E88"
+            size: 20
+        }
+
+        App.MaterialIcon {
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: 328
+            name: "circle-slice-4"
+            color: "#257E88"
+            size: 20
+        }
+
+        App.MaterialIcon {
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: 505
+            name: "circle-slice-6"
+            color: "#257E88"
+            size: 20
+        }
+
+        App.MaterialIcon {
+            anchors.top: timeSlider.bottom
+            anchors.topMargin: -10
+            x: 682
+            name: "circle-slice-8"
+            color: "#257E88"
+            size: 20
         }
     }
 }

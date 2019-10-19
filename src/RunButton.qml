@@ -64,4 +64,23 @@ Rectangle {
         font.pixelSize: 30
         anchors.horizontalCenter: goBtn.horizontalCenter 
     }
+
+    Rectangle {
+        id: cycleWarningBox
+        color: "#FD7503"
+        anchors.top: timeText.bottom
+        anchors.horizontalCenter: timeText.horizontalCenter
+        width: cycleWarningText.width + 20
+        height: cycleWarningText.height + 10
+        radius: 8
+        visible: (app.CLEAN_TIME == app.minute) || (app.RINSE_TIME == app.minute)
+
+        Text {
+            id: cycleWarningText
+            text: app.CLEAN_TIME == app.minute ? "Clean Cycle" : "Rinse Cycle"
+            color: Qt.darker("#FD7503", 1.4)
+            font.pixelSize: 40
+            anchors.centerIn: parent
+        }
+    }
 }

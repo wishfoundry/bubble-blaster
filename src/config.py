@@ -2,7 +2,7 @@
 # how long the priming circuit should stay on, in milliseconds
 PRIME_DURATION = 15 * 1000
 # delay before starting all other circuits, in milliseconds
-POST_PRIME_DELAY = 0
+POST_PRIME_DELAY = 10 * 1000
 
 # smallest time to allow on slider, in minutes
 MIN_TIME = 2

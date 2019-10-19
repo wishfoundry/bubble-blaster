@@ -4,6 +4,8 @@ from PySide2.QtGui import *
 from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
 from PySide2.QtGui import QGuiApplication, QKeySequence
 from gpio import setupPins, turnOn, turnOff, cleanup, A, B, C, D
+import screen as Screen
+from config import PRIME_DURATION
 
 
 def minutesOf(ms):
@@ -36,15 +38,23 @@ class Controller(QObject):
     def runCycle(self):
         print("running cycle")
         turnOn(A)
+        turnOn(B)
+        turnOn(C)
+        turnOn(D)
+        QTimer.singleShot(PRIME_DURATION, lambda : turnOff(B))
+        QTimer.singleShot(self._ms, lambda : turnOff(A))
+        QTimer.singleShot(self._ms, lambda : turnOff(C))
+        QTimer.singleShot(self._ms, lambda : turnOff(D))
+
         
-        interval = 400
-        QTimer.singleShot(1 * interval, lambda : turnOn(B))
-        QTimer.singleShot(2 * interval, lambda : turnOn(C))
-        QTimer.singleShot(3 * interval, lambda : turnOn(D))
-        QTimer.singleShot(4 * interval, lambda : turnOff(A))
-        QTimer.singleShot(5 * interval, lambda : turnOff(B))
-        QTimer.singleShot(6 * interval, lambda : turnOff(C))
-        QTimer.singleShot(7 * interval, lambda : turnOff(D))
+        # interval = 400
+        # QTimer.singleShot(1 * interval, lambda : turnOn(B))
+        # QTimer.singleShot(2 * interval, lambda : turnOn(C))
+        # QTimer.singleShot(3 * interval, lambda : turnOn(D))
+        # QTimer.singleShot(4 * interval, lambda : turnOff(A))
+        # QTimer.singleShot(5 * interval, lambda : turnOff(B))
+        # QTimer.singleShot(6 * interval, lambda : turnOff(C))
+        # QTimer.singleShot(7 * interval, lambda : turnOff(D))
 
     @Signal
     def notifyIsRunning(self): pass
@@ -114,8 +124,14 @@ class Controller(QObject):
 
     @minute.setter
     def setMinute(self, min):
+        if self._isRunning: return
         ms = min * 60 * 1000
         if self._ms == ms: return
         self._ms = ms
         self.minuteChanged.emit()
         self.displayTimeChanged.emit()
+
+    # int between 0 and 100
+    @Slot(int)
+    def brightness(self, value):
+        Screen.brightness(int)

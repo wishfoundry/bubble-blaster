@@ -51,6 +51,13 @@ Rectangle {
             anchors.leftMargin: 50
             width: 100
             y: -2
+            from: 1
+            to: 100
+            value: 100
+
+            onValueChanged: {
+                app.brightness(value)
+            }
 
             App.MaterialIcon {
                 id: brightnessIcon
@@ -68,6 +75,13 @@ Rectangle {
             anchors.rightMargin: 50
             width: 100
             y: -2
+            from: 1
+            to: 100
+            value: 100
+
+            // onValueChanged: {
+            //     app.brightness(value)
+            // }
 
             App.MaterialIcon {
                 id: volumeIcon

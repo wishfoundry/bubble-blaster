@@ -7,6 +7,7 @@ from PySide2.QtGui import QGuiApplication, QKeySequence, QFontDatabase
 from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import QTimer, QUrl
 from Controller import Controller
+from gpio import cleanup
 
 def filePath(fileName):
     return os.path.abspath(os.path.join(os.path.dirname(__file__), fileName))
@@ -35,3 +36,4 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     sys.exit(app.exec_())
+    cleanup()

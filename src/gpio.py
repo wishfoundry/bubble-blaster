@@ -42,6 +42,10 @@ def turnOnAll(pins):
     for pin in pins:
         turnOn(pin)
 
+def turnOffAll(pins):
+    for pin in pins:
+        turnOff(pin)
+
 def testRelays():
     print('testing relays')
     # interval = 400
@@ -59,9 +63,8 @@ def runCycle(duration):
     turnOn(PRIME)
     QTimer.singleShot(PRIME_DURATION, lambda : turnOff(PRIME))
     QTimer.singleShot(POST_PRIME_DELAY, lambda : turnOnAll([MAIN, OXY, ELECTRO]))
-    QTimer.singleShot(duration, lambda : turnOnAll([MAIN, OXY, ELECTRO]))
+    QTimer.singleShot(duration, lambda : turnOffAll([MAIN, OXY, ELECTRO]))
 
 def stopCycle():
     print('stopping cycle')
-    for pin in PINS:
-        turnOff(pin)
+    turnOffAll(PINS)

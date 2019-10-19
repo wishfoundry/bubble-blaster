@@ -5,7 +5,7 @@ from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
 from PySide2.QtGui import QGuiApplication, QKeySequence
 import gpio as Gpio
 import screen as Screen
-from config import PRIME_DURATION
+import config
 
 
 def minutesOf(ms):
@@ -116,3 +116,11 @@ class Controller(QObject):
     @Slot(int)
     def brightness(self, value):
         Screen.brightness(value)
+
+    @Property(int)
+    def MIN_TIME():
+        return config.MIN_TIME
+    
+    @Property(int)
+    def MAX_TIME():
+        return config.MAX_TIME

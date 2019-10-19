@@ -34,8 +34,9 @@ class Controller(QObject):
         self.destroyed.connect(lambda : cleanup())
 
     def runCycle(self):
+        print("running cycle")
         turnOn(A)
-        QTimer.singleShot(2000, lambda : turnOff(A))
+        QTimer.singleShot(4000, lambda : turnOff(A))
 
     @Signal
     def notifyIsRunning(self): pass

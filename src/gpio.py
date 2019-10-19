@@ -26,10 +26,7 @@ def setupPin(pin):
 def setupPins():
     print('using fake mode on pins: ' + str(isFake))
     GPIO.setmode(GPIO.BCM)
-    setupPin(A)
-    setupPin(D)
-    setupPin(C)
-    setupPin(D)
+    [setupPin(i) for i in PINS]
 
 def turnOn(pin): GPIO.output(pin, GPIO.HIGH)
 def turnOff(pin): GPIO.output(pin, GPIO.LOW)

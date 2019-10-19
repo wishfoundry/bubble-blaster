@@ -3,7 +3,7 @@ import datetime
 from PySide2.QtGui import *
 from PySide2.QtCore import Slot, Property, Signal, QObject, QTimer
 from PySide2.QtGui import QGuiApplication, QKeySequence
-from gpio import setupPins, turnOn, turnOff, cleanup, A, B
+from gpio import setupPins, turnOn, turnOff, cleanup, A, B, C, D
 
 
 def minutesOf(ms):

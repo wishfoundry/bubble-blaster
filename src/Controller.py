@@ -13,8 +13,11 @@ import config
 def filePath(fileName):
     return path.abspath(path.join(path.dirname(__file__), fileName))
 
-APPLAUSE = filePath('./resources/applause-1.wav')
-TICK = filePath('./resources/tape-measure-1.wav')
+START = filePath('./resources/sounds/Start Bath Flowbiosis Vocal.wav')
+RINSE = filePath('./resources/sounds/Start Clean Cycle.wav')
+CANCEL = filePath('./resources/sounds/Cancel.wav')
+COMPLETE = filePath('./resources/sounds/Cycle Complete.wav')
+TICK = filePath('./resources/sounds/Minute Selector.wav')
 isSoundEnabled = True
 
 def minutesOf(ms):
@@ -29,6 +32,17 @@ def toDisplayTime(min, sec):
 
 def msToDisplayTime(ms):
     return toDisplayTime(minutesOf(ms), secondsOf(ms))
+
+def isSameCycle(minute, ms):
+    return ms == (minute * 60  * 1000)
+
+def getSoundForCycle(ms):
+    if minutesOf(ms) == config.CLEAN_CYCLE_TIME:
+        return RINSE
+    elif minutesOf(ms) == config.RINSE_CYCLE_TIME:
+        return RINSE
+    else:
+        return START
 
 
 class Controller(QObject):
@@ -48,7 +62,7 @@ class Controller(QObject):
             for device in QAudioDeviceInfo.availableDevices(QAudio.AudioOutput):
                 print(device.deviceName())
             self.sound = QSoundEffect(self)
-            self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
+            self.sound.setSource(QUrl.fromLocalFile(START))
 
     @Signal
     def notifyIsRunning(self): pass
@@ -70,6 +84,12 @@ class Controller(QObject):
     def log(self, msg):
         print(msg)
 
+    def playSound(self, file):
+        if isSoundEnabled:
+            self.sound.stop()
+            self.sound.setSource(QUrl.fromLocalFile(file))
+            self.sound.play()
+
     @Slot()
     def toggle(self):
         if self._isRunning:
@@ -84,13 +104,11 @@ class Controller(QObject):
         self._isRunning = True
         self.notifyIsRunning.emit()
         Gpio.runCycle(self._ms)
-        if isSoundEnabled:
-            self.sound.stop()
-            self.sound.setSource(QUrl.fromLocalFile(APPLAUSE))
-            self.sound.play()
+        self.playSound(getSoundForCycle(self._ms))
     
     def onTimeout(self):
         self.stop()
+        self.playSound(COMPLETE)
     
     def onTick(self):
         self.displayTimeChanged.emit()
@@ -131,10 +149,7 @@ class Controller(QObject):
         self._ms = ms
         self.minuteChanged.emit()
         self.displayTimeChanged.emit()
-        if isSoundEnabled:
-            self.sound.stop()
-            self.sound.setSource(QUrl.fromLocalFile(TICK))
-            self.sound.play()
+        self.playSound(TICK)
 
     # int between 0 and 100
     @Slot(int)
@@ -145,12 +160,8 @@ class Controller(QObject):
     @Slot(int)
     def volume(self, value):
         # real between 0.0 and 1.0
-        print ('audio: ', str(value / 100))
         if isSoundEnabled:
             self.sound.setVolume(value / 100)
-            self.sound.stop()
-            self.sound.setSource(QUrl.fromLocalFile(TICK))
-            self.sound.play()
 
     @Property(int, constant=True)
     def MIN_TIME(self):

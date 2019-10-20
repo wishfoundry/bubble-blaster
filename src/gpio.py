@@ -22,6 +22,27 @@ OXY = RELAY2
 PRIME = RELAY3
 ELECTRO = RELAY4
 
+TIMERS = []
+
+def _removeTimer(tmr):
+    TIMERS.remove(tmr)
+def _runTimer(tmr, fun):
+    _removeTimer(tmr)
+    fun()
+    print('ran io timer')
+
+def timer(ms, fun):
+    tmr = QTimer()
+    tmr.setSingleShot(True)
+    tmr.timeout.connect(lambda : _runTimer(tmr, fun))
+    TIMERS.append(tmr)
+    tmr.start(ms)
+
+def clearTimers():
+    while TIMERS:
+        tmr = TIMERS.pop()
+        tmr.stop()
+
 def setupPin(pin):
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.LOW)
@@ -60,23 +81,24 @@ def testRelays():
 
 def mainCycle(duration):
     print("running main cycle")
+    clearTimers()
     turnOn(PRIME)
-    QTimer.singleShot(PRIME_DURATION, lambda : turnOff(PRIME))
-    QTimer.singleShot(POST_PRIME_DELAY, lambda : turnOnAll([MAIN, OXY, ELECTRO]))
-    QTimer.singleShot(duration, lambda : turnOffAll([MAIN, OXY, ELECTRO]))
+    timer(PRIME_DURATION, lambda : turnOff(PRIME))
+    timer(POST_PRIME_DELAY, lambda : turnOnAll([MAIN, OXY, ELECTRO]))
+    timer(duration, lambda : turnOffAll([MAIN, OXY, ELECTRO]))
 
 def rinseCycle():
     #  drop
     print("running rinse cycle")
     turnOnAll([PRIME, MAIN])
-    QTimer.singleShot(45 * 1000, lambda : turnOn(OXY))
-    QTimer.singleShot(RINSE_CYCLE_TIME * 60 * 1000, lambda : turnOffAll(PINS))
+    timer(45 * 1000, lambda : turnOn(OXY))
+    timer(RINSE_CYCLE_TIME * 60 * 1000, lambda : turnOffAll(PINS))
 
 def cleanCycle():
     # broom/car-turbo-charger
     print("running clean cycle")
     turnOnAll([MAIN, PRIME, OXY])
-    QTimer.singleShot(CLEAN_CYCLE_TIME * 60 * 1000, lambda : turnOffAll(PINS))
+    timer(CLEAN_CYCLE_TIME * 60 * 1000, lambda : turnOffAll(PINS))
 
 def runCycle(duration):
     if duration == (CLEAN_CYCLE_TIME * 60 * 1000):
@@ -89,3 +111,4 @@ def runCycle(duration):
 def stopCycle():
     print('stopping cycle')
     turnOffAll(PINS)
+    clearTimers()

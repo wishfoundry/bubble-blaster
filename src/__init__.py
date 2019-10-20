@@ -15,11 +15,14 @@ def filePath(fileName):
 def minutes(i):
     return i * 60 * 1000
 
+isRasperry = os.uname()[4].startswith('arm')
+
 if __name__ == '__main__':
-    # os.environ['QT_QPA_PLATFORM'] = 'eglfs'
-    # os.environ['QT_QPA_EGLFS_ALWAYS_SET_MODE'] = '1'
-    # os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=true'
-    # QT_LOGGING_RULES="qt.qpa.eglfs.kms=true"
+    if isRasperry:
+        os.environ['QT_QPA_PLATFORM'] = 'eglfs'
+        os.environ['QT_QPA_EGLFS_ALWAYS_SET_MODE'] = '1'
+        # os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=true'
+        # QT_LOGGING_RULES="qt.qpa.eglfs.kms=true"
     os.environ["QT_QUICK_CONTROLS_STYLE"] = "Material"
     app = QGuiApplication(sys.argv)
     QFontDatabase.addApplicationFont(filePath("resources/materialdesignicons-webfont.ttf"))

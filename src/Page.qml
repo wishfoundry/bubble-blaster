@@ -165,6 +165,7 @@ Rectangle {
             anchors.top: timeSlider.bottom
             anchors.topMargin: -10
             x: 19
+            visible: false
             name: "account-star"
             color: "#257E88"
             size: 20

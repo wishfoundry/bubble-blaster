@@ -51,6 +51,7 @@ class Controller(QObject):
         QObject.__init__(self, parent)
         Gpio.setupPins()
         # 10 minutes default
+        self._volume = 100
         self._ms = 10 * 60 * 1000
         self._isRunning = False
         self._tickTimer = QTimer(self)
@@ -87,7 +88,9 @@ class Controller(QObject):
     def playSound(self, file):
         if isSoundEnabled:
             self.sound.stop()
+            self.sound.setVolume(1)
             self.sound.setSource(QUrl.fromLocalFile(file))
+            self.sound.setVolume(self._volume / 100)
             self.sound.play()
 
     @Slot()
@@ -161,6 +164,7 @@ class Controller(QObject):
     def volume(self, value):
         # real between 0.0 and 1.0
         if isSoundEnabled:
+            self._volume = value
             self.sound.setVolume(value / 100)
 
     @Property(int, constant=True)

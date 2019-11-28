@@ -5,12 +5,15 @@ from PySide2.QtQml import QQmlApplicationEngine
 from PySide2.QtQuick import QQuickView
 from PySide2.QtGui import QGuiApplication, QKeySequence, QFontDatabase
 from PySide2.QtWidgets import QApplication
-from PySide2.QtCore import QTimer, QUrl
+from PySide2.QtCore import QTimer, QUrl, QFileSystemWatcher
 from Controller import Controller
 from gpio import cleanup
 
 def filePath(fileName):
     return os.path.abspath(os.path.join(os.path.dirname(__file__), fileName))
+
+def appQmlFile():
+    return QUrl.fromLocalFile(filePath("app.qml"))
 
 def minutes(i):
     return i * 60 * 1000
@@ -31,7 +34,7 @@ if __name__ == '__main__':
     ctrl = Controller()
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty('app', ctrl)
-    engine.load(QUrl.fromLocalFile(filePath("app.qml")))
+    engine.load(appQmlFile())
 
     # safety timeout, must go away!
     # QTimer.singleShot(minutes(10), lambda : app.quit())
@@ -42,6 +45,20 @@ if __name__ == '__main__':
     # timer = QTimer()
     # timer.start(500)  # You may change this if you wish.
     # timer.timeout.connect(lambda: None)  # Let the interpreter run each 500 ms.
+    # if not isRasperry:
+    #     def reload():
+    #         print('files changed!')
+    #         win = engine.rootObjects()[0]
+    #         win.close()
+    #         # win.setSource(QUrl())
+    #         engine.clearComponentCache()
+    #         engine.load(appQmlFile())
+    #         QTimer.singleShot(200, lambda : engine.rootObjects()[0].show())
+    #         # win.setSource(appQmlFile())
+    #         # engine.rootObjects()[0].show()
+    #     watcher = QFileSystemWatcher(app)
+    #     watcher.addPath(os.path.abspath(os.path.dirname(__file__)))
+    #     watcher.directoryChanged.connect(reload)
 
     app.aboutToQuit.connect(lambda : cleanup())
 

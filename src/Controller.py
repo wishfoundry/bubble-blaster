@@ -91,10 +91,8 @@ class Controller(QObject):
             # self.sound.d
             self.sound = QSoundEffect(self)
             self.sound.setSource(QUrl.fromLocalFile(file))
-            # self.sound.setVolume(1)
-            # self.sound.setVolume(self._volume / 100)
-            QTimer.singleShot(1, lambda : self.sound.play())
-            QTimer.singleShot(100, lambda : self.sound.setVolume(self._volume / 100))
+            self.sound.play()
+            QTimer.singleShot(20, lambda : self.sound.setVolume(self._volume / 100))
 
     @Slot()
     def toggle(self):

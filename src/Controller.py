@@ -90,8 +90,9 @@ class Controller(QObject):
             self.sound.stop()
             self.sound.setVolume(1)
             self.sound.setSource(QUrl.fromLocalFile(file))
-            self.sound.setVolume(self._volume / 100)
             self.sound.play()
+            self.sound.setVolume(1)
+            self.sound.setVolume(self._volume / 100)
 
     @Slot()
     def toggle(self):
